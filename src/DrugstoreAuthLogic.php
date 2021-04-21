@@ -275,11 +275,11 @@ class DrugstoreAuthLogic extends Logic
                     'directChange' => $this->dtpPartnerOrgan['infoRmation']['isDirectRenewal']
                 ];
                 $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), json_encode($result));
-            }
-        } else {
-            $time = $this->redis->ttl($key);
-            if ($time > 0 && $time < 1800) {
-                $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), $content);
+            } else {
+                $time = $this->redis->ttl($key);
+                if ($time > 0 && $time < 1800) {
+                    $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), $content);
+                }
             }
         }
     }
