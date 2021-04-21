@@ -94,6 +94,16 @@ class DrugstoreAuthService extends Service
     }
 
     /**
+     * 用token获取店员id
+     * @param $token
+     * @return null
+     */
+    public function setTokenExpire($token)
+    {
+        $this->redis->del('APP:TOKEN:'.$token);
+    }
+
+    /**
      * 判断是否是json
      * @param $string
      * @return bool
