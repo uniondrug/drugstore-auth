@@ -1,0 +1,34 @@
+{
+    "name" : "uniondrug/drugstore-auth",
+    "description" : "",
+    "keywords" : [
+        "phalcon",
+        "auth",
+        "token",
+        "middleware"
+    ],
+    "license" : "proprietary",
+    "type" : "library",
+    "authors" : [
+        {
+            "name" : "Uniondrug Dev Team",
+            "email" : "dev@uniondrug.cn"
+        }
+    ],
+    "require" : {
+        "uniondrug/framework" : "^2.0",
+        "uniondrug/http-client" : "^2.0",
+        "uniondrug/middleware" : "^2.0",
+        "uniondrug/redis" : "^2.0",
+        "uniondrug/service-sdk" : "^3.0"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "Uniondrug\\DrugstoreAuth\\" : "src/"
+        }
+    },
+    "config" : {
+        "preferred-install" : "dist",
+        "sort-packages" : true
+    }
+}
