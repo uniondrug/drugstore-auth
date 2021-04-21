@@ -27,6 +27,24 @@ class DrugstoreAuthLogic extends Logic
     const NOW_STORE_CACHE = 'APP:AUTH_MERCHANT_ID_';
     const COMMON_STORE_CACHE = 'APP:COMMON_AUTH_STORE_ID_';
     const DTP_STORE_CACHE = 'APP:DTP_AUTH_STORE_ID_';
+    const MERCHANT_SALE = 'MERCHANT_SALE';
+    const MERCHANT_SECOND = 'MERCHANT_SECOND';
+    const MERCHANT_PUSH = 'MERCHANT_PUSH';
+    const MEMBER_PAY = 'MEMBER_PAY';
+    const ASSISTANT_WECHAT_PAY = 'ASSISTANT_WECHAT_PAY';
+    const ASSISTANT_APLI_PAY = 'ASSISTANT_APLI_PAY';
+    const IS_USE_PRODUCT_CENTER = 'IS_USE_PRODUCT_CENTER';
+    const ERP_PAY = 'ERP_PAY';
+    const QRCODE_PAY = 'QRCODE_PAY';
+    const DIRECT_CHANGE = 'DIRECT_CHANGE';
+    const WRITE_CHANGE_ORDER = 'WRITE_CHANGE_ORDER';
+    const SCAN_CHANGE_ORDER = 'SCAN_CHANGE_ORDER';
+    const INSURANCE_PAY_METHOD = 'INSURANCE_PAY_METHOD';
+    const ADVISER_ON_OFF = 'ADVISER_ON_OFF'; // 顾问
+    const PRESCRIPTION_SYSTEM = 'PRESCRIPTION_SYSTEM'; // 处方系统
+    const ASSISTANT_GROW = 'ASSISTANT_GROW'; // 积分隐藏提现
+    const DIST_SELL = 'DIST_SELL'; // 积分隐藏提现
+    const OPEN_NEW_ORDER_PROCESS = 'OPEN_NEW_ORDER_PROCESS';
 
     /**
      * @param array|null|object $payload
@@ -34,7 +52,7 @@ class DrugstoreAuthLogic extends Logic
      */
     function run($payload)
     {
-        $assistantId = $payload['asssistantId'];
+        $assistantId = $payload['assistantId'];
         // 添加店员缓存
         $assistant = $this->createAssistantCache($assistantId);
         // 添加连锁缓存
@@ -99,12 +117,13 @@ class DrugstoreAuthLogic extends Logic
      */
     private function createAssistantCache($assistantId)
     {
-        if (!$assistant = $this->redis->get(self::USER_CACHE.$assistantId)) {
+        $key = self::USER_CACHE.$assistantId;
+        if (!$content = $this->redis->get($key)) {
             // 1.获取用户信息
             $assistant = $this->drugstoreAuthService->assistantDetail([
                 'id' => $assistantId
             ]);
-            if ($assistant['status'] != DrugstoreAuthService::STATUS_NORMAL) {
+            if ($assistant['status'] != DrugstoreAuthService::TOKEN_STATUS_NORMAL) {
                 throw new Error(401, 'Forbidden: Invalid Token');
             }
             // 2.获取门店数据
@@ -129,9 +148,13 @@ class DrugstoreAuthLogic extends Logic
                 'dtpStoreOrganId' => $this->dtpStoreOrgan['organizationId'],
                 'dtpPartnerOrganId' => $this->dtpPartnerOrgan['organizationId'],
             ];
-            $this->redis->setex(self::USER_CACHE.$assistantId, $this->config->path('drugAuth.tokenCacheTime'), json_encode($result));
+            $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), json_encode($result));
         } else {
-            $result = json_decode($assistant, true);
+            $time = $this->redis->ttl($key);
+            if ($time > 0 && $time < 1800) {
+                $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), $content);
+            }
+            $result = json_decode($content, true);
         }
         return $result;
     }
@@ -143,7 +166,8 @@ class DrugstoreAuthLogic extends Logic
      */
     private function createMerchantCache($assistant)
     {
-        if (!$this->redis->get(self::NOW_STORE_CACHE.$assistant['storeOrganId'])) {
+        $key = self::NOW_STORE_CACHE.$assistant['storeOrganId'];
+        if (!$content = $this->redis->get($key)) {
             if (!$this->storeOrgan) {
                 $this->initStoreCache($assistant['storeOrganId']);
             }
@@ -152,19 +176,19 @@ class DrugstoreAuthLogic extends Logic
             // 获取门店配置
             $storeConfigs = array_column($this->configs['storeConfig'], null, 'type');
             $data = [
-                'merchantSecond' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, UdappService::MERCHANT_SECOND),
-                'memberPay' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, UdappService::MEMBER_PAY),
-                'assistantWechatPay' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, UdappService::ASSISTANT_WECHAT_PAY),
-                'assistantAliPay' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, UdappService::ASSISTANT_APLI_PAY),
-                'erpPay' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, UdappService::ERP_PAY),
-                'qrcodePay' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, UdappService::QRCODE_PAY),
+                'merchantSecond' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, self::MERCHANT_SECOND),
+                'memberPay' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, self::MEMBER_PAY),
+                'assistantWechatPay' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, self::ASSISTANT_WECHAT_PAY),
+                'assistantAliPay' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, self::ASSISTANT_APLI_PAY),
+                'erpPay' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, self::ERP_PAY),
+                'qrcodePay' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, self::QRCODE_PAY),
                 'directChange' => $this->partnerOrgan['infoRmation']['isDirectRenewal'],
                 'isDirect' => $this->partnerOrgan['infoRmation']['isDirectPay'],
                 'prescriptionSystem' => $this->partnerOrgan['isElectronic'],
-                'insurancePayMethod' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, UdappService::INSURANCE_PAY_METHOD),
-                'assistantGrow' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, UdappService::ASSISTANT_GROW),
-                'isUseProductCenter' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, UdappService::IS_USE_PRODUCT_CENTER),
-                'openNewOrderProcess' => $this->getNoDataDefaultClose($merchantConfigs,$storeConfigs,UdappService::OPEN_NEW_ORDER_PROCESS),
+                'insurancePayMethod' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, self::INSURANCE_PAY_METHOD),
+                'assistantGrow' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, self::ASSISTANT_GROW),
+                'isUseProductCenter' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, self::IS_USE_PRODUCT_CENTER),
+                'openNewOrderProcess' => $this->getNoDataDefaultClose($merchantConfigs, $storeConfigs, self::OPEN_NEW_ORDER_PROCESS),
                 'partnerOrganId' => $this->partnerOrgan['organizationId'],
                 'partnerName' => $this->partnerOrgan['name'],
                 'partnerShortName' => $this->partnerOrgan['shortName'],
@@ -179,10 +203,14 @@ class DrugstoreAuthLogic extends Logic
                 'storeStatus' => $this->storeOrgan['status'],
                 'storeIsWholesale' => array_key_exists('isWholesale', $this->partnerOrgan) ? $this->partnerOrgan['isWholesale'] : 0
             ];
-            $this->redis->setex(self::NOW_STORE_CACHE.$assistant['storeOrganId'], $this->config->path('drugAuth.tokenCacheTime'), json_encode($data));
+            $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), json_encode($data));
+        } else {
+            $time = $this->redis->ttl($key);
+            if ($time > 0 && $time < 1800) {
+                $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), $content);
+            }
         }
     }
-
 
     /**
      * 创建普通门店缓存数据
@@ -191,8 +219,9 @@ class DrugstoreAuthLogic extends Logic
      */
     private function createCommonStoreCache($assistant)
     {
+        $key = self::COMMON_STORE_CACHE.$assistant['commonStoreOrganId'];
         if (array_key_exists('commonStoreOrganId', $assistant) && $assistant['commonStoreOrganId']) {
-            if (!$this->redis->get(self::COMMON_STORE_CACHE.$assistant['commonStoreOrganId'])) {
+            if (!$content = $this->redis->get($key)) {
                 if (!$this->storeOrgan) {
                     $this->initStoreCache($assistant['storeOrganId']);
                 }
@@ -209,7 +238,12 @@ class DrugstoreAuthLogic extends Logic
                     'storeCooperCode' => $this->commonStoreOrgan['cooperationCode'],
                     'directChange' => $this->commonPartnerOrgan['infoRmation']['isDirectRenewal']
                 ];
-                $this->redis->setex(self::COMMON_STORE_CACHE.$assistant['commonStoreOrganId'], $this->config->path('drugAuth.tokenCacheTime'), json_encode($result));
+                $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), json_encode($result));
+            } else {
+                $time = $this->redis->ttl($key);
+                if ($time > 0 && $time < 1800) {
+                    $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), $content);
+                }
             }
         }
     }
@@ -221,8 +255,9 @@ class DrugstoreAuthLogic extends Logic
      */
     private function createDtpStoreCache($assistant)
     {
+        $key = self::DTP_STORE_CACHE.$assistant['dtpStoreOrganId'];
         if (array_key_exists('dtpStoreOrganId', $assistant) && $assistant['dtpStoreOrganId']) {
-            if (!$this->redis->get(self::DTP_STORE_CACHE.$assistant['dtpStoreOrganId'])) {
+            if (!$content = $this->redis->get($key)) {
                 if (!$this->storeOrgan) {
                     $this->initStoreCache($assistant['storeOrganId']);
                 }
@@ -239,7 +274,12 @@ class DrugstoreAuthLogic extends Logic
                     'storeCooperCode' => $this->dtpStoreOrgan['cooperationCode'],
                     'directChange' => $this->dtpPartnerOrgan['infoRmation']['isDirectRenewal']
                 ];
-                $this->redis->setex(self::DTP_STORE_CACHE.$assistant['dtpStoreOrganId'], $this->config->path('drugAuth.tokenCacheTime'), json_encode($result));
+                $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), json_encode($result));
+            }
+        } else {
+            $time = $this->redis->ttl($key);
+            if ($time > 0 && $time < 1800) {
+                $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), $content);
             }
         }
     }
