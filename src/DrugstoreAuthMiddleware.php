@@ -64,6 +64,9 @@ class DrugstoreAuthMiddleware extends Middleware
         DrugstoreAuthLogic::factory([
             'assistantId' => $assistantId
         ]);
+        $json = $request->getJsonRawBody();
+        $json->thisLoginAssistantId = $assistantId;
+        $request->setRawBody(json_encode($json, JSON_UNESCAPED_UNICODE));
         return $next($request);
     }
 }
