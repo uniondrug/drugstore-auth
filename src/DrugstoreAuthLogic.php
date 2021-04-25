@@ -220,8 +220,8 @@ class DrugstoreAuthLogic extends Logic
      */
     private function createCommonStoreCache($assistant)
     {
-        $key = self::COMMON_STORE_CACHE.$assistant['commonStoreOrganId'];
         if (array_key_exists('commonStoreOrganId', $assistant) && $assistant['commonStoreOrganId']) {
+            $key = self::COMMON_STORE_CACHE.$assistant['commonStoreOrganId'];
             if (!$content = $this->redis->get($key)) {
                 if (!$this->storeOrgan) {
                     $this->initStoreCache($assistant['storeOrganId']);
@@ -256,8 +256,8 @@ class DrugstoreAuthLogic extends Logic
      */
     private function createDtpStoreCache($assistant)
     {
-        $key = self::DTP_STORE_CACHE.$assistant['dtpStoreOrganId'];
         if (array_key_exists('dtpStoreOrganId', $assistant) && $assistant['dtpStoreOrganId']) {
+            $key = self::DTP_STORE_CACHE.$assistant['dtpStoreOrganId'];
             if (!$content = $this->redis->get($key)) {
                 if (!$this->storeOrgan) {
                     $this->initStoreCache($assistant['storeOrganId']);

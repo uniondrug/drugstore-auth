@@ -25,12 +25,12 @@ class DrugstoreAuthService extends Service
     public function checkIsWhite($url)
     {
         $whiteController = $this->router->getControllerName();
-        $whiteControllerList = $this->config->path('drugAuth.whiteController');
-        if ($whiteControllerList->offsetExists($whiteController)) {
+        $whiteControllerList = $this->config->path('drugAuth.whiteController')->toArray();
+        if (in_array($whiteController, $whiteControllerList)) {
             return true;
         }
-        $whiteRouteList = $this->config->path('drugAuth.whiteUrl');
-        if ($whiteRouteList->offsetExists($url)) {
+        $whiteRouteList = $this->config->path('drugAuth.whiteUrl')->toArray();
+        if (in_array($url, $whiteRouteList)) {
             return true;
         }
         return false;
