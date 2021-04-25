@@ -8,6 +8,7 @@ use Phalcon\Http\RequestInterface;
 use Uniondrug\Middleware\DelegateInterface;
 use Uniondrug\Middleware\Middleware;
 use Uniondrug\Framework\Logics\Logic;
+use App\Errors\Error;
 
 /**
  * Class TokenAuthMiddleware

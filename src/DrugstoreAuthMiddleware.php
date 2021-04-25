@@ -7,6 +7,7 @@ namespace Uniondrug\DrugstoreAuth;
 use Phalcon\Http\RequestInterface;
 use Uniondrug\Middleware\DelegateInterface;
 use Uniondrug\Middleware\Middleware;
+use App\Errors\Error;
 
 /**
  * Class TokenAuthMiddleware
