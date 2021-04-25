@@ -35,40 +35,35 @@ class DrugstoreAuthMiddleware extends Middleware
      */
     public function handle(RequestInterface $request, DelegateInterface $next)
     {
-        try{
-            // 检查白名单
-            $isWhite = $this->drugstoreAuthService->checkIsWhite($this->request->getURI());
-            if ($isWhite) {
-                return $next($request);
-            }
-            // 获取token
-            $token = $this->drugstoreAuthService->getTokenFromRequest($request);
-            if (!$token) {
+        // 检查白名单
+        $isWhite = $this->drugstoreAuthService->checkIsWhite($this->request->getURI());
+        if ($isWhite) {
+            return $next($request);
+        }
+        // 获取token
+        $token = $this->drugstoreAuthService->getTokenFromRequest($request);
+        if (!$token) {
+            throw new Error(401, 'Forbidden: Invalid Token');
+        }
+        // 获取缓存
+        if (!$assistantId = $this->drugstoreAuthService->getAssistantByToken($token)) {
+            $userToken = $this->drugstoreAuthService->tokenDetail([
+                'token' => $token
+            ]);
+            // 判断有没有
+            if (!$userToken) {
                 throw new Error(401, 'Forbidden: Invalid Token');
             }
-            // 获取缓存
-            if (!$assistantId = $this->drugstoreAuthService->getAssistantByToken($token)) {
-                $userToken = $this->drugstoreAuthService->tokenDetail([
-                    'token' => $token
-                ]);
-                // 判断有没有
-                if (!$userToken) {
-                    throw new Error(401, 'Forbidden: Invalid Token');
-                }
-                // 判断状态以及过期时间
-                if ($userToken['status'] != DrugstoreAuthService::TOKEN_STATUS_NORMAL || strtotime($userToken['gmtExpired']) < time()) {
-                    throw new Error(401, 'Forbidden: Invalid Token');
-                }
-                $assistantId = $userToken['assistantId'];
-                $this->drugstoreAuthService->setTokenCache($token, $assistantId, $this->config->path('drugAuth.tokenCacheTime'));
+            // 判断状态以及过期时间
+            if ($userToken['status'] != DrugstoreAuthService::TOKEN_STATUS_NORMAL || strtotime($userToken['gmtExpired']) < time()) {
+                throw new Error(401, 'Forbidden: Invalid Token');
             }
-            DrugstoreAuthLogic::factory([
-                'assistantId' => $assistantId
-            ]);
-        }catch(\Throwable $e){
-            echo $e->getFile().$e->getLine().$e->getMessage();die;
+            $assistantId = $userToken['assistantId'];
+            $this->drugstoreAuthService->setTokenCache($token, $assistantId, $this->config->path('drugAuth.tokenCacheTime'));
         }
-
+        DrugstoreAuthLogic::factory([
+            'assistantId' => $assistantId
+        ]);
         return $next($request);
     }
 }
