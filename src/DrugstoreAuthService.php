@@ -5,6 +5,7 @@
 namespace Uniondrug\DrugstoreAuth;
 
 use Phalcon\Config;
+use App\Errors\Error;
 use Phalcon\Http\RequestInterface;
 use Uniondrug\Framework\Services\Service;
 
