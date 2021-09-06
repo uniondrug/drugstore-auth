@@ -2,7 +2,7 @@
 /**
  * 基于TOKEN的认证方式。
  */
-namespace Uniondrug\DrugstoreAuth;
+namespace Uniondrug\DrugstoreAuth\Logic;
 
 use Phalcon\Http\RequestInterface;
 use Uniondrug\Middleware\DelegateInterface;
@@ -149,11 +149,11 @@ class DrugstoreAuthLogic extends Logic
                 'dtpStoreOrganId' => $this->dtpStoreOrgan['organizationId'],
                 'dtpPartnerOrganId' => $this->dtpPartnerOrgan['organizationId'],
             ];
-            $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), json_encode($result));
+            $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), json_encode($result));
         } else {
             $time = $this->redis->ttl($key);
             if ($time > 0 && $time < 1800) {
-                $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), $content);
+                $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), $content);
             }
             $result = json_decode($content, true);
         }
@@ -204,11 +204,11 @@ class DrugstoreAuthLogic extends Logic
                 'storeStatus' => $this->storeOrgan['status'],
                 'storeIsWholesale' => array_key_exists('isWholesale', $this->partnerOrgan) ? $this->partnerOrgan['isWholesale'] : 0
             ];
-            $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), json_encode($data));
+            $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), json_encode($data));
         } else {
             $time = $this->redis->ttl($key);
             if ($time > 0 && $time < 1800) {
-                $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), $content);
+                $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), $content);
             }
         }
     }
@@ -239,11 +239,11 @@ class DrugstoreAuthLogic extends Logic
                     'storeCooperCode' => $this->commonStoreOrgan['cooperationCode'],
                     'directChange' => $this->commonPartnerOrgan['infoRmation']['isDirectRenewal']
                 ];
-                $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), json_encode($result));
+                $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), json_encode($result));
             } else {
                 $time = $this->redis->ttl($key);
                 if ($time > 0 && $time < 1800) {
-                    $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), $content);
+                    $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), $content);
                 }
             }
         }
@@ -275,11 +275,11 @@ class DrugstoreAuthLogic extends Logic
                     'storeCooperCode' => $this->dtpStoreOrgan['cooperationCode'],
                     'directChange' => $this->dtpPartnerOrgan['infoRmation']['isDirectRenewal']
                 ];
-                $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), json_encode($result));
+                $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), json_encode($result));
             } else {
                 $time = $this->redis->ttl($key);
                 if ($time > 0 && $time < 1800) {
-                    $this->redis->setex($key, $this->config->path('drugAuth.tokenCacheTime'), $content);
+                    $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), $content);
                 }
             }
         }

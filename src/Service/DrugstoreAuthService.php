@@ -2,7 +2,7 @@
 /**
  * TokenAuthService.php
  */
-namespace Uniondrug\DrugstoreAuth;
+namespace Uniondrug\DrugstoreAuth\Service;
 
 use Phalcon\Config;
 use App\Errors\Error;

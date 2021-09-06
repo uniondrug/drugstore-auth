@@ -2,9 +2,11 @@
 /**
  * 基于TOKEN的认证方式。
  */
-namespace Uniondrug\DrugstoreAuth;
+namespace Uniondrug\DrugstoreAuth\Middleware;
 
 use Phalcon\Http\RequestInterface;
+use Uniondrug\DrugstoreAuth\Logic\DrugstoreAuthLogic;
+use Uniondrug\DrugstoreAuth\Service\DrugstoreAuthService;
 use Uniondrug\Middleware\DelegateInterface;
 use Uniondrug\Middleware\Middleware;
 use App\Errors\Error;
@@ -12,7 +14,7 @@ use App\Errors\Error;
 /**
  * Class TokenAuthMiddleware
  * @package Uniondrug\TokenAuthMiddleware
- * @property \Uniondrug\DrugstoreAuth\DrugstoreAuthService $drugstoreAuthService
+ * @property \Uniondrug\DrugstoreAuth\Service\DrugstoreAuthService $drugstoreAuthService
  */
 class DrugstoreAuthMiddleware extends Middleware
 {
