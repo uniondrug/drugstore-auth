@@ -4,7 +4,9 @@
  */
 namespace Uniondrug\DrugstoreAuth\Logic;
 
+use App\Services\Abstracts\ServiceTrait;
 use Phalcon\Http\RequestInterface;
+use Uniondrug\DrugstoreAuth\Service\DrugstoreAuthService;
 use Uniondrug\Middleware\DelegateInterface;
 use Uniondrug\Middleware\Middleware;
 use Uniondrug\Framework\Logics\Logic;
@@ -13,10 +15,10 @@ use App\Errors\Error;
 /**
  * Class TokenAuthMiddleware
  * @package Uniondrug\TokenAuthMiddleware
- * @property \Uniondrug\DrugstoreAuth\DrugstoreAuthService $drugstoreAuthService
  */
 class DrugstoreAuthLogic extends Logic
 {
+    use ServiceTrait;
     private $partnerOrgan = null;
     private $storeOrgan = null;
     private $dtpStoreOrgan = null;
