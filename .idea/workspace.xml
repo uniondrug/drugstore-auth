@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d884e88b-7eda-46db-badc-95f6d0877fa7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Logic/DrugstoreAuthLogic.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Logic/DrugstoreAuthLogic.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Logic/Logic.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Logic/Logic.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,24 +18,24 @@
     <session id="-270554699">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="4" />
+          <entry key="project.closed" value="5" />
           <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.1" value="2" />
+          <entry key="project.open.time.1" value="3" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.3" value="1" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="json" value="1" />
-          <entry key="php" value="16" />
+          <entry key="php" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="JSON" value="1" />
-          <entry key="PHP" value="16" />
+          <entry key="PHP" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -70,6 +70,15 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Logic/Logic.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1492">
+              <caret line="101" column="1" selection-start-line="101" selection-start-column="1" selection-end-line="101" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Struct/CommonMerchantAuth.php">
           <provider selected="true" editor-type-id="text-editor" />
@@ -91,11 +100,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Logic/DrugstoreAuthLogic.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="337">
-              <caret line="308" column="22" lean-forward="true" selection-start-line="308" selection-start-column="22" selection-end-line="308" selection-end-column="22" />
+            <state relative-caret-position="5015">
+              <caret line="303" column="11" selection-start-line="303" selection-start-column="11" selection-end-line="303" selection-end-column="11" />
               <folding>
                 <element signature="e#73#113#0#PHP" expanded="true" />
               </folding>
@@ -123,6 +132,7 @@
         <option value="$PROJECT_DIR$/src/DrugstoreAuthLogic.php" />
         <option value="$PROJECT_DIR$/src/DrugstoreAuthMiddleware.php" />
         <option value="$PROJECT_DIR$/src/Logic/DrugstoreAuthLogic.php" />
+        <option value="$PROJECT_DIR$/src/Logic/Logic.php" />
       </list>
     </option>
   </component>
@@ -230,18 +240,19 @@
       <workItem from="1618991749661" duration="10613000" />
       <workItem from="1620366637946" duration="2267000" />
       <workItem from="1630920494336" duration="619000" />
-      <workItem from="1630980921331" duration="691000" />
+      <workItem from="1630980921331" duration="740000" />
+      <workItem from="1631082754858" duration="17000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17290000" />
+    <option name="totallyTimeSpent" value="17356000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="785" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.32331902" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.32761088" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -279,18 +290,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DrugstoreAuthProvider.php">
+    <entry file="file://$PROJECT_DIR$/src/Logic/DrugstoreAuthLogic.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        <state relative-caret-position="5015">
+          <caret line="303" column="11" selection-start-line="303" selection-start-column="11" selection-end-line="303" selection-end-column="11" />
+          <folding>
+            <element signature="e#73#113#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Struct/CommonMerchantAuth.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Service/DrugstoreAuthService.php">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Middleware/DrugstoreAuthMiddleware.php">
       <provider selected="true" editor-type-id="text-editor">
@@ -301,13 +309,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Logic/DrugstoreAuthLogic.php">
+    <entry file="file://$PROJECT_DIR$/src/Service/DrugstoreAuthService.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Struct/CommonMerchantAuth.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DrugstoreAuthProvider.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="308" column="22" lean-forward="true" selection-start-line="308" selection-start-column="22" selection-end-line="308" selection-end-column="22" />
-          <folding>
-            <element signature="e#73#113#0#PHP" expanded="true" />
-          </folding>
+        <state relative-caret-position="68">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Logic/Logic.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1492">
+          <caret line="101" column="1" selection-start-line="101" selection-start-column="1" selection-end-line="101" selection-end-column="1" />
         </state>
       </provider>
     </entry>
