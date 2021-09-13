@@ -10,6 +10,8 @@ namespace Uniondrug\DrugstoreAuth\Task;
 use App\Services\Abstracts\ServiceTrait;
 use Uniondrug\Phar\Server\Tasks\XTask as Task;
 use Uniondrug\Framework\Services\ServiceTrait as UnionDrugServiceTrait;
+use Phalcon\Config;
+use Uniondrug\Redis\Client;
 
 /**
  * Class XTask
