@@ -65,7 +65,7 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
         $projectName = $this->config->path('app')->appName;
         $key = 'APP:'.$projectName.':'.$className;
         $value = $this->redis->getSet($key, 1);
-        $this->redis->setTimeout($key, 3);
+        $this->redis->expire($key, 3);
         if ($value) {
             return true;
         }
