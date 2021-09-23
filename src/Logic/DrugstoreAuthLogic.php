@@ -58,7 +58,7 @@ class DrugstoreAuthLogic extends Logic
         $assistantId = $payload['assistantId'];
         // 添加店员缓存
         $assistant = $this->createAssistantCache($assistantId);
-        if ($this->checkIsNotHasStore($assistant)) {
+        if (!$this->checkIsNotHasStore($assistant)) {
             return false;
         }
         // 添加连锁缓存
