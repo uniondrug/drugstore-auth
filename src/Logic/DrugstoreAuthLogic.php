@@ -163,9 +163,9 @@ class DrugstoreAuthLogic extends Logic
                 'storeOrganId' => $assistant['storeOrganId'],
                 'partnerOrganId' => $assistant['partnerOrganId'],
                 'commonStoreOrganId' => $this->commonStoreOrgan ? $this->commonStoreOrgan['organizationId'] : 0,
-                'commonPartnerOrganId' => $this->commonStoreOrgan ? $this->commonPartnerOrgan['organizationId'] : 0,
+                'commonPartnerOrganId' => $this->commonPartnerOrgan ? $this->commonPartnerOrgan['organizationId'] : 0,
                 'dtpStoreOrganId' => $this->dtpStoreOrgan ? $this->dtpStoreOrgan['organizationId'] : 0,
-                'dtpPartnerOrganId' => $this->dtpStoreOrgan ? $this->dtpPartnerOrgan['organizationId'] : 0,
+                'dtpPartnerOrganId' => $this->dtpPartnerOrgan ? $this->dtpPartnerOrgan['organizationId'] : 0,
             ];
             $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), json_encode($result));
         } else {
