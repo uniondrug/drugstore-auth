@@ -50,8 +50,8 @@ class DrugstoreAuthLogic extends Logic
     const OPEN_NEW_ORDER_PROCESS = 'OPEN_NEW_ORDER_PROCESS';
 
     /**
-     * @param array|null|object $payload
-     * @return Row|array|\Uniondrug\Structs\StructInterface
+     * @param $payload
+     * @return bool
      */
     function run($payload)
     {
