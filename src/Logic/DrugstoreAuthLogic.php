@@ -146,7 +146,7 @@ class DrugstoreAuthLogic extends Logic
                 throw new Error(401, 'Forbidden: Invalid Token');
             }
             // 2.获取门店数据
-            if (!$this->storeOrgan) {
+            if (!$this->storeOrgan && $assistant['storeOrganId']) {
                 $this->initStoreCache($assistant['storeOrganId']);
             }
             $result = [
