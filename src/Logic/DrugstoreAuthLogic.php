@@ -58,7 +58,7 @@ class DrugstoreAuthLogic extends Logic
         $assistantId = $payload['assistantId'];
         // 添加店员缓存
         $assistant = $this->createAssistantCache($assistantId);
-        if($this->checkIsNotHasStore($assistant)){
+        if ($this->checkIsNotHasStore($assistant)) {
             return false;
         }
         // 添加连锁缓存
@@ -162,10 +162,10 @@ class DrugstoreAuthLogic extends Logic
                 'isAdviser' => $assistant['isAdviser'],
                 'storeOrganId' => $assistant['storeOrganId'],
                 'partnerOrganId' => $assistant['partnerOrganId'],
-                'commonStoreOrganId' => $this->commonStoreOrgan['organizationId'],
-                'commonPartnerOrganId' => $this->commonPartnerOrgan['organizationId'],
-                'dtpStoreOrganId' => $this->dtpStoreOrgan['organizationId'],
-                'dtpPartnerOrganId' => $this->dtpPartnerOrgan['organizationId'],
+                'commonStoreOrganId' => $this->commonStoreOrgan ? $this->commonStoreOrgan['organizationId'] : 0,
+                'commonPartnerOrganId' => $this->commonStoreOrgan ? $this->commonPartnerOrgan['organizationId'] : 0,
+                'dtpStoreOrganId' => $this->dtpStoreOrgan ? $this->dtpStoreOrgan['organizationId'] : 0,
+                'dtpPartnerOrganId' => $this->dtpStoreOrgan ? $this->dtpPartnerOrgan['organizationId'] : 0,
             ];
             $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), json_encode($result));
         } else {
