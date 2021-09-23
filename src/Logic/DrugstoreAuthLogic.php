@@ -58,12 +58,28 @@ class DrugstoreAuthLogic extends Logic
         $assistantId = $payload['assistantId'];
         // 添加店员缓存
         $assistant = $this->createAssistantCache($assistantId);
+        if($this->checkIsNotHasStore($assistant)){
+            return false;
+        }
         // 添加连锁缓存
         $this->createMerchantCache($assistant);
         // 获取普通门店缓存
         $this->createCommonStoreCache($assistant);
         // 获取dtp门店缓存
         $this->createDtpStoreCache($assistant);
+    }
+
+    /**
+     * 检查是否店员没有门店
+     * @param $assistant
+     * @return bool
+     */
+    private function checkIsNotHasStore($assistant)
+    {
+        if ($assistant && $assistant['id'] && !$assistant['storeOrganId']) {
+            return false;
+        }
+        return true;
     }
 
     /**
