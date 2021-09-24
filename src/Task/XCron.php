@@ -65,7 +65,7 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
         $projectName = $this->config->path('app')->appName;
         $key = 'APP:'.$projectName.':'.$className;
         $value = $this->redis->getSet($key, 1);
-        $this->redis->expire($key, 3);
+        $this->redis->expire($key, 1800);
         if ($value) {
             return true;
         }
@@ -89,5 +89,20 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
         // 检查redis
         $this->checkRedis();
         return true;
+    }
+
+    /**
+     * 后置任务
+     * 当run()方法执行完成后, 其返回结果作为参数以引用模式
+     * 传递给本方法afterRun(), 本方法操作入参可改变最终的
+     * run()方法返回的任务处理结果
+     * @param mixed $data
+     */
+    public function afterRun(& $data)
+    {
+        $className = get_called_class();
+        $projectName = $this->config->path('app')->appName;
+        $key = 'APP:'.$projectName.':'.$className;
+        $this->redis->del($key);
     }
 }
