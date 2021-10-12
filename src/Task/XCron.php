@@ -5,6 +5,7 @@
  * Date: 2021/8/26
  * Time: 5:25 PM
  */
+
 namespace Uniondrug\DrugstoreAuth\Task;
 
 use Uniondrug\Framework\Services\ServiceTrait as UnionDrugServiceTrait;
@@ -32,7 +33,7 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
         if ($this->config->path('database')) {
             try {
                 $this->db->query("SELECT 1");
-            } catch(\Throwable $e) {
+            } catch (\Throwable $e) {
                 $this->db->connect();
             }
         }
@@ -46,7 +47,7 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
         if ($this->config->path('redis')) {
             try {
                 $this->redis->ping();
-            } catch(\Throwable $e) {
+            } catch (\Throwable $e) {
                 $config = $this->config->path('redis');
                 // 1. Redis对象
                 $optConfig = isset($config->options) && $config->options instanceof Config ? $config->options->toArray() : $config->toArray();
@@ -63,13 +64,28 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
     {
         $className = get_called_class();
         $projectName = $this->config->path('app')->appName;
-        $key = 'APP:'.$projectName.':'.$className;
+        $key = 'APP:' . $projectName . ':' . $className;
         $value = $this->redis->getSet($key, 1);
         $this->redis->expire($key, 1800);
         if ($value) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 检查redis链接
+     * @throws \Throwable
+     */
+    private function isRedisConnection()
+    {
+        if ($this->config->path('redis')) {
+            try {
+                $this->redis->ping();
+            } catch (\Throwable $e) {
+                throw $e;
+            }
+        }
     }
 
     /**
@@ -80,14 +96,15 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
      */
     public function beforeRun()
     {
-        // 检查重复性
-        if ($this->checkRepeat()) {
-            return false;
-        }
         // 检查mysql
         $this->checkMysql();
         // 检查redis
         $this->checkRedis();
+        // 检查重复性
+        $this->isRedisConnection();
+        if ($this->checkRepeat()) {
+            return false;
+        }
         return true;
     }
 
@@ -98,11 +115,11 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
      * run()方法返回的任务处理结果
      * @param mixed $data
      */
-    public function afterRun(& $data)
+    public function afterRun(&$data)
     {
         $className = get_called_class();
         $projectName = $this->config->path('app')->appName;
-        $key = 'APP:'.$projectName.':'.$className;
+        $key = 'APP:' . $projectName . ':' . $className;
         $this->redis->del($key);
     }
 }
