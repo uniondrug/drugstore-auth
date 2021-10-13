@@ -74,21 +74,6 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
     }
 
     /**
-     * 检查redis链接
-     * @throws \Throwable
-     */
-    private function isRedisConnection()
-    {
-        if ($this->config->path('redis')) {
-            try {
-                $this->redis->ping();
-            } catch (\Throwable $e) {
-                throw $e;
-            }
-        }
-    }
-
-    /**
      * 前置任务
      * 仅当返回true时, 继续调用run()方法, 反之, 跳出任务
      * 不做任务处理, 其中run(), afterRun()都不会触发
@@ -100,8 +85,6 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
         $this->checkMysql();
         // 检查redis
         $this->checkRedis();
-        // 检查重复性
-        $this->isRedisConnection();
         if ($this->checkRepeat()) {
             return false;
         }
