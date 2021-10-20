@@ -69,7 +69,7 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
             return true;
         }
         $value = $this->redis->getSet($key, 1);
-        $this->redis->expire($key, 1800);
+        $this->redis->expire($key, 300);
         if ($value) {
             return true;
         }
