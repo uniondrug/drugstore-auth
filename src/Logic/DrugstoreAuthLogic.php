@@ -168,12 +168,6 @@ class DrugstoreAuthLogic extends Logic
                 'dtpPartnerOrganId' => $this->dtpPartnerOrgan ? $this->dtpPartnerOrgan['organizationId'] : 0,
             ];
             $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), json_encode($result));
-        } else {
-            $time = $this->redis->ttl($key);
-            if ($time > 0 && $time < 1800) {
-                $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), $content);
-            }
-            $result = json_decode($content, true);
         }
         return $result;
     }
@@ -223,11 +217,6 @@ class DrugstoreAuthLogic extends Logic
                 'storeIsWholesale' => array_key_exists('isWholesale', $this->partnerOrgan) ? $this->partnerOrgan['isWholesale'] : 0
             ];
             $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), json_encode($data));
-        } else {
-            $time = $this->redis->ttl($key);
-            if ($time > 0 && $time < 1800) {
-                $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), $content);
-            }
         }
     }
 
@@ -258,11 +247,6 @@ class DrugstoreAuthLogic extends Logic
                     'directChange' => $this->commonPartnerOrgan['infoRmation']['isDirectRenewal']
                 ];
                 $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), json_encode($result));
-            } else {
-                $time = $this->redis->ttl($key);
-                if ($time > 0 && $time < 1800) {
-                    $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), $content);
-                }
             }
         }
     }
@@ -294,11 +278,6 @@ class DrugstoreAuthLogic extends Logic
                     'directChange' => $this->dtpPartnerOrgan['infoRmation']['isDirectRenewal']
                 ];
                 $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), json_encode($result));
-            } else {
-                $time = $this->redis->ttl($key);
-                if ($time > 0 && $time < 1800) {
-                    $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), $content);
-                }
             }
         }
     }
