@@ -2,6 +2,7 @@
 /**
  * 基于TOKEN的认证方式。
  */
+
 namespace Uniondrug\DrugstoreAuth\Logic;
 
 use App\Services\Abstracts\ServiceTrait;
@@ -19,6 +20,7 @@ use App\Errors\Error;
 class DrugstoreAuthLogic extends Logic
 {
     use ServiceTrait;
+
     private $partnerOrgan = null;
     private $storeOrgan = null;
     private $dtpStoreOrgan = null;
@@ -136,7 +138,7 @@ class DrugstoreAuthLogic extends Logic
      */
     private function createAssistantCache($assistantId)
     {
-        $key = self::USER_CACHE.$assistantId;
+        $key = self::USER_CACHE . $assistantId;
         if (!$content = $this->redis->get($key)) {
             // 1.获取用户信息
             $assistant = $this->drugstoreAuthService->assistantDetail([
@@ -168,8 +170,10 @@ class DrugstoreAuthLogic extends Logic
                 'dtpPartnerOrganId' => $this->dtpPartnerOrgan ? $this->dtpPartnerOrgan['organizationId'] : 0,
             ];
             $this->redis->setex($key, $this->config->path('drugAuth.assistantCacheTime'), json_encode($result));
+            return $result;
+        } else {
+            return json_decode($content, true);
         }
-        return $result;
     }
 
     /**
@@ -179,7 +183,7 @@ class DrugstoreAuthLogic extends Logic
      */
     private function createMerchantCache($assistant)
     {
-        $key = self::NOW_STORE_CACHE.$assistant['storeOrganId'];
+        $key = self::NOW_STORE_CACHE . $assistant['storeOrganId'];
         if (!$content = $this->redis->get($key)) {
             if (!$this->storeOrgan) {
                 $this->initStoreCache($assistant['storeOrganId']);
@@ -228,7 +232,7 @@ class DrugstoreAuthLogic extends Logic
     private function createCommonStoreCache($assistant)
     {
         if (array_key_exists('commonStoreOrganId', $assistant) && $assistant['commonStoreOrganId']) {
-            $key = self::COMMON_STORE_CACHE.$assistant['commonStoreOrganId'];
+            $key = self::COMMON_STORE_CACHE . $assistant['commonStoreOrganId'];
             if (!$content = $this->redis->get($key)) {
                 if (!$this->storeOrgan) {
                     $this->initStoreCache($assistant['storeOrganId']);
@@ -259,7 +263,7 @@ class DrugstoreAuthLogic extends Logic
     private function createDtpStoreCache($assistant)
     {
         if (array_key_exists('dtpStoreOrganId', $assistant) && $assistant['dtpStoreOrganId']) {
-            $key = self::DTP_STORE_CACHE.$assistant['dtpStoreOrganId'];
+            $key = self::DTP_STORE_CACHE . $assistant['dtpStoreOrganId'];
             if (!$content = $this->redis->get($key)) {
                 if (!$this->storeOrgan) {
                     $this->initStoreCache($assistant['storeOrganId']);
