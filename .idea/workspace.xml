@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d884e88b-7eda-46db-badc-95f6d0877fa7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Logic/DrugstoreAuthLogic.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Logic/DrugstoreAuthLogic.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Logic/Logic.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Logic/Logic.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +152,7 @@
       <workItem from="1632475645515" duration="16000" />
       <workItem from="1634031704392" duration="1547000" />
       <workItem from="1634715977409" duration="1132000" />
-      <workItem from="1637224758209" duration="719000" />
+      <workItem from="1637224758209" duration="1369000" />
     </task>
     <servers />
   </component>
