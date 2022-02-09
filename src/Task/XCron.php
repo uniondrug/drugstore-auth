@@ -25,6 +25,8 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
     use ServiceTrait;
     use UnionDrugServiceTrait;
 
+    private $lockValue;
+
     /**
      * 检查mysql是否连接
      */
@@ -65,12 +67,8 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
         $className = get_called_class();
         $projectName = $this->config->path('app')->appName;
         $key = 'APP:' . $projectName . ':' . $className;
-        if ($this->redis->get($key)) {
-            return true;
-        }
-        $value = $this->redis->getSet($key, 1);
-        $this->redis->expire($key, 300);
-        if ($value) {
+        $this->lockValue = $this->redisLock->lock($key, 10000);
+        if (!$this->lockValue) {
             return true;
         }
         return false;
@@ -103,9 +101,8 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
      */
     public function afterRun(&$data)
     {
-        $className = get_called_class();
-        $projectName = $this->config->path('app')->appName;
-        $key = 'APP:' . $projectName . ':' . $className;
-        $this->redis->del($key);
+        if ($this->lockValue) {
+            $this->redisLock->unlock($this->lockValue);
+        }
     }
 }
