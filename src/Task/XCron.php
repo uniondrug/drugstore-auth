@@ -67,7 +67,7 @@ abstract class XCron extends \Uniondrug\Phar\Server\Tasks\XCron
         $className = get_called_class();
         $projectName = $this->config->path('app')->appName;
         $key = 'APP:' . $projectName . ':' . $className;
-        $this->lockValue = $this->redisLock->lock($key, 10000);
+        $this->lockValue = $this->redisLock->lock($key, 5 * 60000);
         if (!$this->lockValue) {
             return true;
         }
