@@ -4,6 +4,7 @@ namespace Uniondrug\DrugstoreAuth;
 
 use Phalcon\Di\ServiceProviderInterface;
 use Uniondrug\DrugstoreAuth\Service\DrugstoreAuthService;
+use Uniondrug\DrugstoreAuth\Service\WxService;
 
 /**
  * Class DrugstoreAuthProvider
@@ -17,6 +18,12 @@ class DrugstoreAuthProvider implements ServiceProviderInterface
             'drugstoreAuthService',
             function () {
                 return new DrugstoreAuthService();
+            }
+        );
+        $di->set(
+            'wxAuthService',
+            function () {
+                return new WxService();
             }
         );
     }

@@ -16,7 +16,7 @@ use App\Errors\Error;
 /**
  * Class WxMiddleware
  * @package Uniondrug\WxMiddleware
- * @property \Uniondrug\DrugstoreAuth\Service\WxService $wxService
+ * @property \Uniondrug\DrugstoreAuth\Service\WxService $wxAuthService
  */
 class WxMiddleware extends Middleware
 {
@@ -28,22 +28,28 @@ class WxMiddleware extends Middleware
     public function handle(RequestInterface $request, DelegateInterface $next)
     {
         // WhiteList
-        if ($this->wxService->isWhiteList($request->getURI())) {
+        if ($this->wxAuthService->isWhiteList($request->getURI())) {
             return $next($request);
         }
         $origin = $request->getHeader('origin');
         switch ($origin) {
             case 'dtp':
                 // 假如是dtp小程序
-                return $this->dtp($request);
+                if ($this->dtp($request)) {
+                    return $next($request);
+                }
                 break;
             case 'merchant':
                 // 假如是连锁小程序
-                return $this->merchant($request);
+                if ($this->merchant($request)) {
+                    return $next($request);
+                }
                 break;
             default:
                 // 假如是微信环境
-                return $this->wx($request);
+                if ($this->wx($request)) {
+                    return $next($request);
+                }
                 break;
         }
     }
@@ -56,14 +62,14 @@ class WxMiddleware extends Middleware
     private function dtp($request)
     {
         $authType = 25;
-        $openId = $this->wxService->getTokenFromRequest($request);
+        $openId = $this->wxAuthService->getTokenFromRequest($request);
         // 用openid获取用户
-        $openInfo = $this->wxService->infoOpenId([
+        $openInfo = $this->wxAuthService->infoOpenId([
             'oauthType' => $authType,
             'openId' => $openId
         ]);
         if (isset($openInfo['memberId']) && $openInfo['memberId']) {
-            $member = $this->wxService->getUser([
+            $member = $this->wxAuthService->getUser([
                 'memberId' => $openInfo['memberId']
             ]);
             $_SERVER['member'] = [
@@ -72,7 +78,7 @@ class WxMiddleware extends Middleware
                 'name' => $member['memberName'] ?? '',
                 'mobile' => $member['account'] ?? ''
             ];
-            return $next($request);
+            return true;
         } else {
             return $this->serviceServer->withError('Unauthorized', 401);
         }
@@ -86,14 +92,14 @@ class WxMiddleware extends Middleware
     private function merchant($request)
     {
         $authType = 24;
-        $openId = $this->wxService->getTokenFromRequest($request);
+        $openId = $this->wxAuthService->getTokenFromRequest($request);
         // 用openid获取用户
-        $openInfo = $this->wxService->infoOpenId([
+        $openInfo = $this->wxAuthService->infoOpenId([
             'oauthType' => $authType,
             'openId' => $openId
         ]);
         if (isset($openInfo['memberId']) && $openInfo['memberId']) {
-            $member = $this->wxService->getUser([
+            $member = $this->wxAuthService->getUser([
                 'memberId' => $openInfo['memberId']
             ]);
             $_SERVER['member'] = [
@@ -102,7 +108,7 @@ class WxMiddleware extends Middleware
                 'name' => $member['memberName'] ?? '',
                 'mobile' => $member['account'] ?? ''
             ];
-            return $next($request);
+            return true;
         } else {
             return $this->serviceServer->withError('Unauthorized', 401);
         }
@@ -116,18 +122,18 @@ class WxMiddleware extends Middleware
     private function wx($request)
     {
         // 1. 提取TOKEN, return 401
-        $token = $this->wxService->getTokenFromRequest($request);
+        $token = $this->wxAuthService->getTokenFromRequest($request);
         if (empty($token)) {
             $this->di->getLogger('auth')->debug(sprintf("[Auth] Unauthorized."));
             return $this->serviceServer->withError('Unauthorized', 401);
         }
         // 2. 校验TOKEN, return 403
-        if (!$member = $this->wxService->checkToken($token)) {
+        if (!$member = $this->wxAuthService->checkToken($token)) {
             $this->di->getLogger('auth')->debug(sprintf("[Auth] Invalid Token: token=%s", $token));
             return $this->serviceServer->withError('Forbidden: Invalid Token', 403);
         }
         $_SERVER['member'] = $member;
-        return $next($request);
+        return true;
     }
 
 }
