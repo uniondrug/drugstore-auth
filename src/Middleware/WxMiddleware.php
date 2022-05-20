@@ -47,13 +47,13 @@ class WxMiddleware extends Middleware
                 break;
             case 'alipayMerchant':
                 // 假如是连锁小程序
-                if ($this->merchant($request, 34)) {
+                if ($this->auth($request, 34)) {
                     return $next($request);
                 }
                 break;
             case 'alipayDtp':
                 // 假如是连锁小程序
-                if ($this->merchant($request, 35)) {
+                if ($this->auth($request, 35)) {
                     return $next($request);
                 }
                 break;
