@@ -35,13 +35,25 @@ class WxMiddleware extends Middleware
         switch ($origin) {
             case 'dtp':
                 // 假如是dtp小程序
-                if ($this->dtp($request)) {
+                if ($this->auth($request, 25)) {
                     return $next($request);
                 }
                 break;
             case 'merchant':
                 // 假如是连锁小程序
-                if ($this->merchant($request)) {
+                if ($this->auth($request, 24)) {
+                    return $next($request);
+                }
+                break;
+            case 'alipayMerchant':
+                // 假如是连锁小程序
+                if ($this->merchant($request, 34)) {
+                    return $next($request);
+                }
+                break;
+            case 'alipayDtp':
+                // 假如是连锁小程序
+                if ($this->merchant($request, 35)) {
                     return $next($request);
                 }
                 break;
@@ -55,43 +67,12 @@ class WxMiddleware extends Middleware
     }
 
     /**
-     * dtp小程序认证
-     * @return mixed|\Phalcon\Http\Response
-     * @throws Error
+     * 认证
+     * @param $request
+     * @return void
      */
-    private function dtp($request)
+    private function auth($request, $authType)
     {
-        $authType = 25;
-        $openId = $this->wxAuthService->getTokenFromRequest($request);
-        // 用openid获取用户
-        $openInfo = $this->wxAuthService->infoOpenId([
-            'oauthType' => $authType,
-            'openId' => $openId
-        ]);
-        if (isset($openInfo['memberId']) && $openInfo['memberId']) {
-            $member = $this->wxAuthService->getUser([
-                'memberId' => $openInfo['memberId']
-            ]);
-            $_SERVER['member'] = [
-                'memberId' => $openInfo['memberId'],
-                'wxOpenid' => $openId,
-                'name' => $member['memberName'] ?? '',
-                'mobile' => $member['account'] ?? ''
-            ];
-            return true;
-        } else {
-            throw new \Exception('Unauthorized', 401);
-        }
-    }
-
-    /**
-     * 连锁小程序认证
-     * @return mixed|\Phalcon\Http\Response
-     * @throws Error
-     */
-    private function merchant($request)
-    {
-        $authType = 24;
         $openId = $this->wxAuthService->getTokenFromRequest($request);
         // 用openid获取用户
         $openInfo = $this->wxAuthService->infoOpenId([
