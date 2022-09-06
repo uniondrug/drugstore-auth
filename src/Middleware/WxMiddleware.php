@@ -57,6 +57,12 @@ class WxMiddleware extends Middleware
                     return $next($request);
                 }
                 break;
+            case 'haoYao':
+                // 假如是药联好药小程序
+                if ($this->auth($request, 15)) {
+                    return $next($request);
+                }
+                break;
             default:
                 // 假如是微信环境
                 if ($this->wx($request)) {

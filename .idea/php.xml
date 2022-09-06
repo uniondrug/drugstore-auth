@@ -2,7 +2,23 @@
 <project version="4">
   <component name="PhpIncludePathManager">
     <include_path>
-      <path value="$PROJECT_DIR$/../../phalcon-dev/ide/3.2.0" />
+      <path value="$USER_HOME$/phalcon-dev/ide/3.2.0" />
+      <path value="$PROJECT_DIR$/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php72" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-idn" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/vendor/symfony/dotenv" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/vendor/uniondrug/service-sdk" />
+      <path value="$PROJECT_DIR$/vendor/uniondrug/http-client" />
+      <path value="$PROJECT_DIR$/vendor/uniondrug/redis" />
+      <path value="$PROJECT_DIR$/vendor/uniondrug/phar" />
+      <path value="$PROJECT_DIR$/vendor/uniondrug/middleware" />
+      <path value="$PROJECT_DIR$/vendor/uniondrug/framework" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
