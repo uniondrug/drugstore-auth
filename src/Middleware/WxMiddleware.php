@@ -97,7 +97,7 @@ class WxMiddleware extends Middleware
             ];
             return true;
         } else {
-            throw new \Exception('Unauthorized', 401);
+            throw new Error('Unauthorized', 401);
         }
     }
 
@@ -112,12 +112,12 @@ class WxMiddleware extends Middleware
         $token = $this->wxAuthService->getTokenFromRequest($request);
         if (empty($token)) {
             $this->di->getLogger('auth')->debug(sprintf("[Auth] Unauthorized."));
-            throw new \Exception('Unauthorized', 401);
+            throw new Error('Unauthorized', 401);
         }
         // 2. 校验TOKEN, return 403
         if (!$member = $this->wxAuthService->checkToken($token)) {
             $this->di->getLogger('auth')->debug(sprintf("[Auth] Invalid Token: token=%s", $token));
-            throw new \Exception('Forbidden: Invalid Token', 403);
+            throw new Error('Forbidden: Invalid Token', 403);
         }
         $_SERVER['member'] = $member;
         return true;
