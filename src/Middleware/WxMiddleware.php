@@ -97,7 +97,7 @@ class WxMiddleware extends Middleware
             ];
             return true;
         } else {
-            throw new Error('Unauthorized', 401);
+            throw new Error(401, 'Unauthorized');
         }
     }
 
